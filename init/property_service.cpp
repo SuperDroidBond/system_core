@@ -778,15 +778,6 @@ static const char *snet_prop_value[] = {
 	NULL
 };
 
-static void workaround_snet_properties() {
-	LOG(INFO) << "snet: Hiding sensitive props";
-
-	// Hide all sensitive props
-	for (int i = 0; snet_prop_key[i]; ++i) {
-		property_set(snet_prop_key[i], snet_prop_value[i]);
-	}
-}
-
 /* When booting an encrypted system, /data is not mounted when the
  * property service is started, so any properties stored there are
  * not loaded.  Vold triggers init to load these properties once it
@@ -969,9 +960,6 @@ void property_load_boot_defaults(bool load_debug_prop) {
     if (android::base::GetBoolProperty("ro.persistent_properties.ready", false)) {
         update_sys_usb_config();
     }
-
-    // Workaround SafetyNet
-    workaround_snet_properties();
 
     // Restore the normal property override security after init extension is executed
     weaken_prop_override_security = false;
